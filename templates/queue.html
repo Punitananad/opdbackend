@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Section Filter Dropdown -->
+<form action="{{ url_for('queue_by_section') }}" method="get" class="mb-4">
+    <div class="form-group">
+        <label for="section">Select Section:</label>
+        <select name="section" id="section" class="form-control" onchange="this.form.submit()">
+            <option value="General Medicine" {% if section == 'General Medicine' %}selected{% endif %}>General Medicine</option>
+            <option value="Pediatrics" {% if section == 'Pediatrics' %}selected{% endif %}>Pediatrics</option>
+            <option value="Orthopedics" {% if section == 'Orthopedics' %}selected{% endif %}>Orthopedics</option>
+            <option value="Cardiology" {% if section == 'Cardiology' %}selected{% endif %}>Cardiology</option>
+            <option value="All Sections" {% if section == 'All Sections' %}selected{% endif %}>View All Sections</option>
+        </select>
+    </div>
+</form>
+
+
+<h1>{{ section }} - Patient's Queue</h1>
+<p>Maximum S.No: {{ total_patients }}</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Name</th>
+            <th scope="col">Father's Name</th>
+            <th scope="col">Done</th>
+            <th scope="col">Re-Schedule</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for patient in all_patients %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.fathers_name }}</td>
+            <td>{{ patient.id }}</td>
+            <td>
+                <form action="{{ url_for('mark_done', id=patient.id) }}?section={{ section }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-success">DONE</button>
+                </form>
+            </td>
+            <td>
+                <form action="{{ url_for('reschedule_patient', id=patient.id) }}?section={{ section }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-warning">Re-Schedule</button>
+                </form>
+            </td>
+            <td>
+                <form action="{{ url_for('delete_patient', id=patient.id) }}?section={{ section }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

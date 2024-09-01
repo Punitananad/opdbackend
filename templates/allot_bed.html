@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Allot Bed {{ bed.id }}</h1>
+
+    <!-- Form to check patient ID -->
+    <form method="post">
+        <label for="patient_id">Enter Patient ID to Allot Bed:</label>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <input name="patient_id" id="patient_id" type="text" value="{{ request.form.get('patient_id') }}" required>
+        <button class="btn btn-sm btn-warning" type="submit">Check Patient</button>
+    </form>
+
+    {% if patient %}
+        <!-- Display patient information and allotment form -->
+        <div id="patient-info">
+            <p>Patient Name: {{ patient.name }}</p>
+            <form method="post">
+                <input type="hidden" name="patient_id" value="{{ patient.id }}">
+                <input type="hidden" name="allot" value="true">
+                <button class="btn btn-sm btn-success" type="submit">Allot Bed</button>
+            </form>
+        </div>
+    {% elif request.method == 'POST' %}
+        <p>Patient ID not found. Please check the ID and try again.</p>
+    {% endif %}
+
+    <a href="{{ url_for('non_allotted_beds') }}">Back to Non-Allotted Beds</a>
+{% endblock %}

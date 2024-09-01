@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron">
+    <form id="bed-form" action="{{ url_for('floordata', floor_number=floor_number) }}" method="POST">
+        <h1>Total Beds at {{ floor_number }}st Floor:</h1>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label for="bedcount">Input Here: </label>
+        <input name="bedcount" type="number" id="bedcount" {% if bedcount %}disabled{% endif %} value="{{ bedcount }}">
+        <button type="submit" class="btn btn-sm btn-warning" {% if bedcount %}disabled{% endif %}>Add</button>
+        <a class="btn btn-sm btn-secondary" href="{{url_for('home')}}">Back to Home</a>
+    </form>
+
+    {% if bedcount %}
+    <p>No. of beds inputted: {{ bedcount }}</p>
+    <button id="edit-button" class="btn btn-sm btn-primary">Edit</button>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Bed No.</th>
+                <th scope="col">Bed Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Allotted By</th>
+                <th scope="col">Patient ID</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bed in beds %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>Bed {{ bed.id }}</td>
+                <td>
+                    {% if bed.is_allotted %}
+                        Allotted
+                    {% else %}
+                        Not Allotted
+                    {% endif %}
+                </td>
+                <td>
+                    {% if bed.allotted_by %}
+                        {% if bed.allotted_by|int %}
+                                {{ bed.allotted_by }}
+                        {% else %}
+                            <a href="{{ url_for('profilepage', id=bed.patient_id|int) }}">
+                                {{ bed.allotted_by }}
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if bed.patient_id %}
+                        {{ bed.patient_id }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not bed.is_allotted %}
+                        <form action="{{ url_for('allot_bed', bed_id=bed.id) }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <input type="text" name="allotted_by" placeholder="Enter Patient ID" required>
+                            <button type="submit" class="btn btn-sm btn-success">Allot Bed {{ bed.id }}</button>
+                        </form>
+                    {% else %}
+                        <form action="{{ url_for('unallot_bed', bed_id=bed.id) }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <button type="submit" class="btn btn-sm btn-danger">Unallot Bed {{ bed.id }}</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('edit-button')?.addEventListener('click', function() {
+        // Enable the input field and the submit button
+        document.getElementById('bedcount').disabled = false;
+        document.querySelector('button[type="submit"]').disabled = false;
+        
+        // Hide the edit button after clicking
+        this.style.display = 'none';
+    });
+</script>
+{% endblock %}

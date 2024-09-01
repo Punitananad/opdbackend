@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Non-Allotted Beds</title>
+</head>
+<body>
+    <h1>Non-Allotted Beds</h1>
+    <ul>
+        {% for bed in beds %}
+            <li>Bed {{ bed.bed_number }} - <a href="{{ url_for('allot_bed', bed_id=bed.id) }}">Allot Bed</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Medicine History for {{ patient.name }}</h1>
+
+{% if medicine_by_date %}
+    {% for date_str, medicines in medicine_by_date.items() %}
+        <h2>Medicines Added on {{ date_str }}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Dosage (mg)</th>
+                    <th>Frequency</th>
+                    <th>Duration (days)</th>
+                    <th>QTY</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for med in medicines %}
+                    <tr>
+                        <td>{{ med.name }}</td>
+                        <td>{{ med.dosage }}mg</td>
+                        <td>{{ med.frequency }}</td>
+                        <td>{{ med.duration }}</td>
+                        <td>{{ med.qty }}</td>
+                        <td>{{ med.remarks }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% else %}
+    <p>No medicines found for this patient.</p>
+{% endif %}
+
+<a href="{{ url_for('profilepage', id=patient.id) }}" class="btn btn-primary mt-3">Back to Profile</a>
+{% endblock %}

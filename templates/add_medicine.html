@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="jumbotron">
+    <form id="medicine-form" method="get">
+        <h1>Medicine Page</h1>
+        <label for="profile_id"><h3>ENTER PATIENT ID YOU WANT TO VIEW:</h3></label>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <input type="number" name="profile_id" id="profile_id" required>
+        <button class="btn btn-success" type="submit">SUBMIT</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('medicine-form').addEventListener('submit', function(event) {
+        var profileId = document.getElementById('profile_id').value;
+        if (!profileId || isNaN(profileId) || profileId <= 0) {
+            event.preventDefault(); // Prevent form submission
+            alert('Please enter a valid Patient ID.');
+        } else {
+            this.action = "{{ url_for('profilepage', id=0) }}".replace('0', profileId);
+        }
+    });
+</script>
+
+{% endblock %}

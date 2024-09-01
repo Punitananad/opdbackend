@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Floor Information</h1>
+
+{% if floors %}
+    <p>Number of Floors: {{ floors|length }}</p>
+
+    <!-- Table to display floor information -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Floor Name</th>
+                <th scope="col">Allotted Beds</th>
+                <th scope="col">Non-Allotted Beds</th>
+                <th scope="col">Total Beds</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for floor in floors %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th> <!-- Serial Number -->
+                <td><a href="{{ url_for('floordata', floor_number=floor.floor_count) }}">Floor {{ floor.floor_count }}</a></td> <!-- Floor Name with Link -->
+                <td>{{ floor.allotted_beds }}</td> <!-- Allotted Beds -->
+                <td>{{ floor.non_allotted_beds }}</td> <!-- Non-Allotted Beds -->
+                <td>{{ floor.total_beds }}</td> <!-- Total Beds -->
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-warning" href="{{url_for('manage_floors')}}">Want to Manage floors?</a>
+{% else %}
+    <p>No floor information provided.</p>
+{% endif %}
+
+{% endblock %}

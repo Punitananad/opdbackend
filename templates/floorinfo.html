@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron">
+    <form action="{{ url_for('floorinfo') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label for="floor">ENTER THE NO. OF FLOORS IN YOUR HOSPITAL: </label>
+        <input name="floor" id="floor" type="number" required {% if form_submitted %}disabled{% endif %}>
+        <button type="submit" class="btn btn-sm btn-warning" {% if form_submitted %}disabled{% endif %}>Add</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Print Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .stamp-header {
+            text-align: center;
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .details {
+            margin-bottom: 20px;
+        }
+        .details label {
+            font-weight: bold;
+        }
+        .notes {
+            border-top: 1px solid black;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stamp-header">
+        <h1>Hospital Stamp Head</h1>
+        <p>All Patient Details Below</p>
+    </div>
+    
+    <div class="details">
+        <p><label>Name:</label> {{ name }}</p>
+        <p><label>Gender:</label> {{ gender }}</p>
+        <p><label>State:</label> {{ state }}</p>
+        <p><label>Phone No:</label> {{ phn_no }}</p>
+        <p><label>Weight:</label> {{ weight }}</p>
+        <p><label>Age:</label> {{ age }}</p>
+        <p><label>Blood Group:</label> {{ blood }}</p>
+        <p><label>Section:</label> {{ section }}</p>
+        <p><label>Father's Name:</label> {{ f_name }}</p>
+    </div>
+
+    <div class="notes">
+        <p>Additional Notes:</p>
+        <p style="border: 1px dashed #000; height: 100px;">&nbsp;</p>
+    </div>
+<script>
+    window.onload = function() {
+        window.print();
+    };
+</script>
+
+</body>
+</html>
